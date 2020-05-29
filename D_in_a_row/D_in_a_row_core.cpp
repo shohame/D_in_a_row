@@ -8,7 +8,23 @@
 void TakeOff(stBoard* a_pB, char a_x);
 
 void Eval_All_Index(stBoard *a_pB);
+void Eval_All_Index_Level_5(stBoard *a_pB);
+
 //void Display_Board(stBoard* a_pB);
+
+
+int GetBestValve(int* a_pEval_a, char a_N)
+{
+	int BestValue = -10000;
+	for (int i = 0; i < a_N; i++) // Find the best value
+	{
+		if (BestValue < a_pEval_a[i])
+		{
+			BestValue = a_pEval_a[i];
+		}
+	}
+	return BestValue;
+}
 
 
 
@@ -17,22 +33,16 @@ char GetNextIndex(stBoard* a_pB)
 	stBoard* pB = a_pB;
 	char* pBestIdx = a_pB->m_BestIdx_a;
 
+	int BestValue;
 
-	Eval_All_Index(pB);
-	int BestValue = -100;
+	Eval_All_Index_Level_5(pB);
 
-	for (int i = 0; i < pB->m_Nx; i++) // Find the best value
-	{
-		if (BestValue < a_pB->m_Eval_a[i])
-		{
-			BestValue = a_pB->m_Eval_a[i];
-		}
-	}
+	BestValue = GetBestValve(a_pB->m_Eval_a[0], pB->m_Nx);
 
 	char BestIdxCount = 0;
 	for (int i = 0; i < pB->m_Nx; i++) // Find the best value ( can be a_Turn or 0 )
 	{
-		if (BestValue == a_pB->m_Eval_a[i])
+		if (BestValue == a_pB->m_Eval_a[0][i])
 		{
 			pBestIdx[BestIdxCount] = i;
 			BestIdxCount++;
@@ -48,31 +58,29 @@ char GetNextIndex(stBoard* a_pB)
 
 
 
-
-
-
-
-// 10 the computer 1 the human
-// -100 => Can't play;  -1 => Lost index;  100 => Win index
+// 	10 represent arduino represent the human
+// -2000 => Can't play;  -1000 => Lost index;  1000 => Win index
 void Eval_All_Index(stBoard *a_pB)
 {
 	stBoard* pB = a_pB;
 	char legal;
-	int* pEval_a = pB->m_Eval_a;
+	int* pEval_a = pB->m_Eval_a[0];
 	//    char* pHist_P;
 
 	for (int x = 0; x < pB->m_Nx; x++)
 	{
+		pEval_a[x] = 0;
 		legal = PutIn(pB, x, 10);
+
 		if (!legal)
 		{
-			pEval_a[x] = -1000; // can't put here!
+			pEval_a[x] = -2000; // can't put here!
 			continue;
 		}
 
 		Calc_All_Dir(pB);
 
-		if (pB->m_Hist_P[1][4] > 0)		// If Arduino can win? ... mark it as 100
+		if (pB->m_Hist_P[1][4] > 0)		// If Arduino can win? ... mark it as 1000
 		{
 			pEval_a[x] = 1000;
 			TakeOff(pB, x);
@@ -92,14 +100,87 @@ void Eval_All_Index(stBoard *a_pB)
 
 			Calc_All_Dir(pB);
 
-			if (pB->m_Hist_P[0][4] > 0) // If HUMAN can win? ... mark it as -1
+			if (pB->m_Hist_P[0][4] > 0) // If HUMAN can win? ... mark it as -100
 			{
-				pEval_a[x] = -1;
+				pEval_a[x] = -100;
 				TakeOff(pB, x2);
 				break;
 			}
 			TakeOff(pB, x2);
 		}
+		TakeOff(pB, x);
+	}
+
+  for (int x = 2; x < 5; x++)
+  {
+    if (pB->m_Mv[x] == 0)
+    {
+      pEval_a[x] += 1;
+    }
+  }
+}
+
+// 	10 represent arduino represent the human
+// -2000 => Can't play;  -1000 => Lost index;  1000 => Win index
+void Eval_All_Index_Level_5(stBoard *a_pB)
+{
+	stBoard* pB = a_pB;
+	char legal;
+	int* pEval_a = pB->m_Eval_a[0];
+	int* pEval_2_a = pB->m_Eval_a[1];
+	//    char* pHist_P;
+
+	for (int x = 0; x < pB->m_Nx; x++)
+	{
+		pEval_a[x] = 0;
+		legal = PutIn(pB, x, 10);
+		
+		if (!legal)
+		{
+			pEval_a[x] = -2000; // can't put here!
+			continue;
+		}
+
+		Calc_All_Dir(pB);
+
+		if (pB->m_Hist_P[1][4] > 0)		// If Arduino can win? ... mark it as 1000
+		{
+			pEval_a[x] = 1000;
+			TakeOff(pB, x);
+			continue;
+		}
+
+		pEval_a[x] += pB->m_Hist_P[1][3] * 10; 
+		pEval_a[x] += pB->m_Hist_P[1][2]; 
+
+		for (int x2 = 0; x2 < pB->m_Nx; x2++)
+		{
+			pEval_2_a[x2] = 0;
+			
+			legal = PutIn(pB, x2, 1);
+			if (!legal)
+			{
+				pEval_2_a[x2] = -2000; // can't put here!
+				continue;
+			}
+
+
+			Calc_All_Dir(pB);
+
+			if (pB->m_Hist_P[0][4] > 0) // If HUMAN can win? ... mark it as -100
+			{
+				pEval_2_a[x2] = 1000;
+				TakeOff(pB, x2);
+				break;
+			}
+			pEval_2_a[x2] += pB->m_Hist_P[0][3] * 10; 
+			pEval_2_a[x2] += pB->m_Hist_P[0][2]; 
+
+			TakeOff(pB, x2);
+		}
+		
+		int HisBestValue = GetBestValve(pEval_2_a, pB->m_Nx);		
+		pEval_a[x] -= HisBestValue;
 		TakeOff(pB, x);
 	}
 

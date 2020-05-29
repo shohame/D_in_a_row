@@ -2,7 +2,7 @@
 #define _IR_INPUT_H_
 
 
-#define IR_VCC  9
+#define IR_VCC  8
 
 #define IR_RECEIVER_PIN   11  
 

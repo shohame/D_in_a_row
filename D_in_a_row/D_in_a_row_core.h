@@ -14,7 +14,7 @@ typedef struct Board
 
 	char m_M[BOARD_NY][BOARD_NX];	// The board 0 == free; 1 == user; 10 == Arduino;
 	char m_Mv[BOARD_NX];				// The current level hieght on [x] row just to help put the take off...
-	int  m_Eval_a[BOARD_NX];			// The Evaluated row to put in
+	int  m_Eval_a[2][BOARD_NX];			// The Evaluated row to put in
 	char m_Hist_P[2][5];				// Histogram to count how many in all rows for each player
 	char m_BestIdxCount;
 	char m_BestIdx_a[BOARD_NX];
