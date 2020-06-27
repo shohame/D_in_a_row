@@ -150,7 +150,7 @@ void Eval_All_Index_Level_5(stBoard *a_pB)
 			continue;
 		}
 
-		pEval_a[x] += pB->m_Hist_P[1][3] * 10; 
+		pEval_a[x] += pB->m_Hist_P[1][3] * 3; 
 		pEval_a[x] += pB->m_Hist_P[1][2]; 
 
 		for (int x2 = 0; x2 < pB->m_Nx; x2++)
@@ -173,7 +173,7 @@ void Eval_All_Index_Level_5(stBoard *a_pB)
 				TakeOff(pB, x2);
 				break;
 			}
-			pEval_2_a[x2] += pB->m_Hist_P[0][3] * 10; 
+			pEval_2_a[x2] += pB->m_Hist_P[0][3] * 3; 
 			pEval_2_a[x2] += pB->m_Hist_P[0][2]; 
 
 			TakeOff(pB, x2);
@@ -327,6 +327,3 @@ void InitBoard(stBoard *a_pB, char a_Nx, char a_Ny)
 	a_pB->m_Nx = a_Nx;
 	a_pB->m_Ny = a_Ny;
 }
-
-
-
