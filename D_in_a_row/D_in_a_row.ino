@@ -172,8 +172,8 @@ char TestIfGameOver(stGame* a_pGame)
 	
 	char WhoWon = Calc_All_Dir(pB);
  
-  char x = pB->m_WinLoction[0][0];
-  char y = pB->m_WinLoction[0][1];
+  char x = pB->m_WinLocation[0][0];
+  char y = pB->m_WinLocation[0][1];
 	
 	CRGB WonColor = LS_Get_XY(x, y);
 	
@@ -184,8 +184,8 @@ char TestIfGameOver(stGame* a_pGame)
 		{
 			for (char i = 0; i < 4; i++)
 			{
-				x = pB->m_WinLoction[i][0];
-				y = pB->m_WinLoction[i][1];
+				x = pB->m_WinLocation[i][0];
+				y = pB->m_WinLocation[i][1];
 				
 				LS_Set_XY(x, y , CP_GetColor(en_COLOR_WHITE_IDX));
 			}
@@ -193,8 +193,8 @@ char TestIfGameOver(stGame* a_pGame)
 			delay(50);
 			for (char i = 0; i < 4; i++)
 			{
-				x = pB->m_WinLoction[i][0];
-				y = pB->m_WinLoction[i][1];
+				x = pB->m_WinLocation[i][0];
+				y = pB->m_WinLocation[i][1];
 				
 				LS_Set_XY(x, y , WonColor);
 			}

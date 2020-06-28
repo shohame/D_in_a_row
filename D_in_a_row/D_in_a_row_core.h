@@ -19,7 +19,7 @@ typedef struct Board
 	char m_BestIdxCount;
 	char m_BestIdx_a[BOARD_NX];
 	
-	char m_WinLoction[4][2];
+	char m_WinLocation[4][2];
  
 } stBoard;
 

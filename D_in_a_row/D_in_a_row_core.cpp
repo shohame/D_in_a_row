@@ -6,14 +6,12 @@
 
 
 void TakeOff(stBoard* a_pB, char a_x);
-
 void Eval_All_Index(stBoard *a_pB);
-void Eval_All_Index_Level_5(stBoard *a_pB);
 
 //void Display_Board(stBoard* a_pB);
 
 
-int GetBestValve(int* a_pEval_a, char a_N)
+int GetBestValue(int* a_pEval_a, char a_N)
 {
 	int BestValue = -10000;
 	for (int i = 0; i < a_N; i++) // Find the best value
@@ -35,9 +33,9 @@ char GetNextIndex(stBoard* a_pB)
 
 	int BestValue;
 
-	Eval_All_Index_Level_5(pB);
+	Eval_All_Index(pB);
 
-	BestValue = GetBestValve(a_pB->m_Eval_a[0], pB->m_Nx);
+	BestValue = GetBestValue(a_pB->m_Eval_a[0], pB->m_Nx);
 
 	char BestIdxCount = 0;
 	for (int i = 0; i < pB->m_Nx; i++) // Find the best value ( can be a_Turn or 0 )
@@ -58,71 +56,9 @@ char GetNextIndex(stBoard* a_pB)
 
 
 
-// 	10 represent arduino represent the human
+// 	10 represent arduino 1 represent the human
 // -2000 => Can't play;  -1000 => Lost index;  1000 => Win index
 void Eval_All_Index(stBoard *a_pB)
-{
-	stBoard* pB = a_pB;
-	char legal;
-	int* pEval_a = pB->m_Eval_a[0];
-	//    char* pHist_P;
-
-	for (int x = 0; x < pB->m_Nx; x++)
-	{
-		pEval_a[x] = 0;
-		legal = PutIn(pB, x, 10);
-
-		if (!legal)
-		{
-			pEval_a[x] = -2000; // can't put here!
-			continue;
-		}
-
-		Calc_All_Dir(pB);
-
-		if (pB->m_Hist_P[1][4] > 0)		// If Arduino can win? ... mark it as 1000
-		{
-			pEval_a[x] = 1000;
-			TakeOff(pB, x);
-			continue;
-		}
-
-		pEval_a[x] = pB->m_Hist_P[1][3]+10; // The best index that makes the most 2/3 in a row...
-
-		for (int x2 = 0; x2 < pB->m_Nx; x2++)
-		{
-			legal = PutIn(pB, x2, 1);
-			if (!legal)
-			{
-				continue;
-			}
-
-
-			Calc_All_Dir(pB);
-
-			if (pB->m_Hist_P[0][4] > 0) // If HUMAN can win? ... mark it as -100
-			{
-				pEval_a[x] = -100;
-				TakeOff(pB, x2);
-				break;
-			}
-			TakeOff(pB, x2);
-		}
-		TakeOff(pB, x);
-	}
-
-  for (int x = 2; x < 5; x++)
-  {
-    if (pB->m_Mv[x] == 0)
-    {
-      pEval_a[x] += 1;
-    }
-  }
-}
-
-// 	10 represent arduino represent the human
-// -2000 => Can't play;  -1000 => Lost index;  1000 => Win index
-void Eval_All_Index_Level_5(stBoard *a_pB)
 {
 	stBoard* pB = a_pB;
 	char legal;
@@ -179,7 +115,7 @@ void Eval_All_Index_Level_5(stBoard *a_pB)
 			TakeOff(pB, x2);
 		}
 		
-		int HisBestValue = GetBestValve(pEval_2_a, pB->m_Nx);		
+		int HisBestValue = GetBestValue(pEval_2_a, pB->m_Nx);		
 		pEval_a[x] -= HisBestValue;
 		TakeOff(pB, x);
 	}
@@ -247,8 +183,8 @@ char Calc_All_Dir(stBoard* a_pB)	// Return 10 if arduino has won or 1 if human
 				{
 					for (char i = 0; i < 4; i++)
 					{
-						pB->m_WinLoction[i][0] = x + dV[d][i][0];
-						pB->m_WinLoction[i][1] = y + dV[d][i][1];
+						pB->m_WinLocation[i][0] = x + dV[d][i][0];
+						pB->m_WinLocation[i][1] = y + dV[d][i][1];
 					}
 				}
 				
