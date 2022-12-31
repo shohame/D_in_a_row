@@ -120,7 +120,7 @@ void Eval_All_Index(stBoard *a_pB)
 		TakeOff(pB, x);
 	}
 
-  for (int x = 2; x < 5; x++)
+  for (int x = 2; x < (BOARD_NX-2); x++)
   {
     if (pB->m_Mv[x] == 0)
     {

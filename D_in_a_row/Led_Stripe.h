@@ -1,16 +1,11 @@
 #ifndef _TTT_LED_H_
 #define _TTT_LED_H_
 
-
-
-
-
-
-
+#define START_LED 1
 #define LEDS_NX 7
 #define LEDS_NY 7
 
-#define NUM_LEDS (LEDS_NX * LEDS_NY + 1)
+#define NUM_LEDS (LEDS_NX * LEDS_NY + START_LED)
 
 #define DATA_PIN 2
 

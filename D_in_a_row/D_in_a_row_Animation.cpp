@@ -52,13 +52,13 @@ void Anim_ScrollText_on_Color (char a_R)
 {
   if ( a_R < (NUM_OF_ROW - 8))
   {
-    for(char Ri = 0; Ri<7; Ri++)
+    for(char Ri = 0; Ri<BOARD_NX; Ri++)
     {
       for (char C=0; C<7; C++)
       {
 		  if (DispMatrix[C][NUM_OF_ROW -a_R-7+Ri] == 1)
 		  {
-			  LS_Set_XY(6-Ri, 6-C, CP_GetColor(en_COLOR_WHITE_IDX));
+			  LS_Set_XY(BOARD_NX-1-Ri, LEDS_NY-C-2, CP_GetColor(en_COLOR_WHITE_IDX));
 		  }
       } 
     }

@@ -65,7 +65,7 @@ void LS_Set_XY(char a_X, char a_Y, CRGB a_Val)
 
 	char Led_idx = Y * LEDS_NX + X;
 
-	Led_arr[Led_idx + 1] = a_Val;
+	Led_arr[Led_idx + START_LED] = a_Val;
 
 }
 
@@ -87,7 +87,7 @@ CRGB LS_Get_XY(char a_X, char a_Y)
 
   char Led_idx = Y * LEDS_NX + X;
 
-  return(Led_arr[Led_idx + 1]);
+  return(Led_arr[Led_idx + START_LED]);
 
 }
 

@@ -42,7 +42,7 @@ void setup()
   
 	LS_Setup();
 	cIR_In.Setup();
-	InitBoard(&g_Game_s.m_Board_s, 7, 6);
+	InitBoard(&g_Game_s.m_Board_s, BOARD_NX, BOARD_NY);
 	randomSeed(analogRead(0));
   Serial.println (random(6));
 }
